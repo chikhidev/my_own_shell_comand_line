@@ -34,7 +34,7 @@ int handle_exit(char *command, char *line_input, char **args) {
   return 1;
 }
 
-void handle_env(char *command, char *line_input, char **args) {
+int handle_env(char *command, char *line_input, char **args) {
   int comp;
   char **env = environ;
 
@@ -44,7 +44,9 @@ void handle_env(char *command, char *line_input, char **args) {
       printf("%s\n", *env);
       env++;
     }
+    return 0;
   }
+  return 1;
 }
 
 int main(void) {
@@ -57,7 +59,6 @@ int main(void) {
   int i;
 
   imojie();
-
   while (1) {
     i = 0;
     printf("\033[0;31m$ \033[0m");
@@ -70,22 +71,21 @@ int main(void) {
     // tokinize command:
     command = strtok(line_input, " ");
 
+    // handle commands -------------
     if (handle_exit(command, line_input, args) == 0) {
       break;
       exit(0);
     }
 
-    handle_env(command, line_input, args);
+    if (handle_env(command, line_input, args) == 0) {
+      break;
+      exit(0);
+    }
 
+    //------------------------
     while ((args[i] = strtok(NULL, " ")) != NULL)
       i++;
-
     args[i] = NULL;
-
-    printf("args:\n");
-    for (int x = 0; x < i; x++) {
-      printf("%s\n", args[x]);
-    }
 
     // fork:
     int chid = fork();
