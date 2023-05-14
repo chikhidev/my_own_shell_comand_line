@@ -10,7 +10,6 @@ void imojie() {
   printf("  ＿ノヽ ノ＼＿ \n\n");
 }
 
-
 void remove_newline(char *line_input) {
   int b = 0;
   while (line_input[b] != '\0') {
