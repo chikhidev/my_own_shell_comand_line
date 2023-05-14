@@ -4,6 +4,8 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
+extern char **environ;
+
 void imojie() {
   printf("⠀  ⠀ (\\__/)\n");
   printf("     (•ㅅ•)\n");
@@ -30,6 +32,19 @@ int handle_exit(char *command, char *line_input, char **args) {
     return 0;
   }
   return 1;
+}
+
+void handle_env(char *command, char *line_input, char **args) {
+  int comp;
+  char **env = environ;
+
+  comp = strcmp(command, "env");
+  if (comp == 0 || comp == 10) {
+    while (*env) {
+      printf("%s\n", *env);
+      env++;
+    }
+  }
 }
 
 int main(void) {
@@ -59,6 +74,8 @@ int main(void) {
       break;
       exit(0);
     }
+
+    handle_env(command, line_input, args);
 
     while ((args[i] = strtok(NULL, " ")) != NULL)
       i++;
